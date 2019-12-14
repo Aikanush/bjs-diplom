@@ -1,3 +1,5 @@
+'use strict';
+
 class Profile {
   constructor(user) {
   this.user = user;
@@ -67,19 +69,21 @@ function main() {
           if (err) {
             console.error(`Error adding new user`);
           } else {
-            console.log(`Added new user ${username}`);
+            console.log(`Added new user Alex`);
 
             Alex.performLogin((err, data) => {
                  if (err) {
                  console.error(`Error authorizing new user`);
                  } else {
-                 console.log(`Authorized new user ${username}`);
+                 console.log(`Authorized new user Alex`);
 
-                  Alex.addMoney({ currency: 'RUB', amount: 100 }, (err, data) => {
+                 let startCapital = { currency: 'RUB', amount: 100 };
+
+                  Alex.addMoney(startCapital, (err, data) => {
                          if (err) {
                            console.error(`Error during adding money to ${username}`);
                          } else {
-                           console.log(`Added ${amount} ${currency} to ${username}`);
+                           console.log(`Added ${startCapital.amount} ${startCapital.currency} to Alex`);
 
                            getStocks((err, data) => {
                               if (err) {
