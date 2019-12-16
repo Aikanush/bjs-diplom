@@ -22,17 +22,17 @@ class Profile {
      }
 
   addMoney({ currency, amount }, callback) {
-        console.log(`Adding ${amount} of ${currency} to ${this.username}`);
+        console.log(`Adding ${amount} of ${currency} to ${this.user.username}`);
         return ApiConnector.addMoney({ currency, amount }, (err, data) => {
-            console.log(`Added ${amount} of ${currency} to ${this.username}`);
+            console.log(`Added ${amount} of ${currency} to ${this.user.username}`);
             callback(err, data);
         });
     }
 
     convertMoney({ fromCurrency, targetCurrency, targetAmount }, callback) {
-      console.log(`Converting ${targetAmount} of ${fromCurrency} to ${targetAmount}`);
+      console.log(`Converting ${targetAmount} of ${fromCurrency} to ${targetCurrency}`);
       return ApiConnector.convertMoney({ fromCurrency, targetCurrency, targetAmount }, (err, data) => {
-        console.log(`Converted ${targetAmount} of ${fromCurrency} to ${targetAmount}`);
+        console.log(`Converted ${targetAmount} of ${fromCurrency} to ${targetCurrency}`);
         callback(err, data);
       });
     }
@@ -91,13 +91,35 @@ function main() {
                               } else {
                                 console.log(`Got stocks`);
                                 console.log(data);
-
-                                // Alex.convertMoney({ fromCurrency: 'RUB', targetCurrency: 'Netkoins', targetAmount: 100 }, (err, data) => {
-                       
-
-                               //     });
                               }
                              });
+                           let targetCapital = { fromCurrency: 'RUB', targetCurrency: 'NETCOIN', targetAmount: 0.1 };
+
+                            Alex.convertMoney(targetCapital, (err, data) => {
+                                if (err) {
+                                  console.error(`Error converting money to Alex`);
+                                } else {
+                                   console.log(`Converted ${targetCapital.targetAmount} of ${targetCapital.fromCurrency} to ${targetCapital.targetCurrency}`); 
+
+                                   Semen.createUser((err, data) => {
+                                        if (err) {
+                                            console.error(`Error adding new user`);
+                                        } else {
+                                        console.log(`Added new user Semen`);
+                                       }
+                                   });
+
+                                   let transfering = { to: Semen, amount: 0.1};
+
+                                   Alex.transferMoney(transfering, (err, data) => {
+                                          if (err) {
+                                            console.error(`Error transfering money`);
+                                        } else {
+                                            console.log(`Transfered ${transfering.amount} to ${transfering.to}`);
+                                        }
+                                  });
+                               }
+                          });
 
                          }
                   });
