@@ -39,7 +39,7 @@ class Profile {
 
     transferMoney({ to, amount }, callback) {
       console.log(`Transfering ${amount} to ${to}`);
-      return ApiConnector.trasferMoney( {to, amount}, (err, data) => {
+      return ApiConnector.transferMoney( {to, amount}, (err, data) => {
         console.log(`Transfered ${amount} to ${to}`);
         callback(err, data);
       });
@@ -91,11 +91,10 @@ function main() {
                               } else {
                                 console.log(`Got stocks`);
                                 console.log(data);
-                              }
-                             });
-                           let targetCapital = { fromCurrency: 'RUB', targetCurrency: 'NETCOIN', targetAmount: 0.1 };
 
-                            Alex.convertMoney(targetCapital, (err, data) => {
+                                let targetCapital = { fromCurrency: startCapital.currency, targetCurrency: 'NETCOIN', targetAmount: data[99].RUB_NETCOIN * startCapital.amount};
+
+                                Alex.convertMoney(targetCapital, (err, data) => {
                                 if (err) {
                                   console.error(`Error converting money to Alex`);
                                 } else {
@@ -105,21 +104,24 @@ function main() {
                                         if (err) {
                                             console.error(`Error adding new user`);
                                         } else {
-                                        console.log(`Added new user Semen`);
+                                            console.log(`Added new user Semen`);
+
+                                        let transfering = { to: Semen.user.username, amount: targetCapital.targetAmount};
+
+
+                                         Alex.transferMoney(transfering, (err, data) => {
+                                           if (err) {
+                                              console.error(`Error transfering money`);
+                                           } else {
+                                              console.log(`Transfered ${transfering.amount} to ${transfering.to}`);
+                                           }
+                                         });
                                        }
                                    });
-
-                                   let transfering = { to: Semen, amount: 0.1};
-
-                                   Alex.transferMoney(transfering, (err, data) => {
-                                          if (err) {
-                                            console.error(`Error transfering money`);
-                                        } else {
-                                            console.log(`Transfered ${transfering.amount} to ${transfering.to}`);
-                                        }
-                                  });
-                               }
-                          });
+                                  }
+                                 });
+                              }
+                             });
 
                          }
                   });
